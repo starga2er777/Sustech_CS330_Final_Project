@@ -1,6 +1,6 @@
 # Sustech_CS330_Final_Project
 
-####File Structure  
+#### File Structure  
 .
 ├── test.py                 # main script   
 ├── test_input              # input directory
