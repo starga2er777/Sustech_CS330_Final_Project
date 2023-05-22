@@ -5,6 +5,5 @@ test_input
 test_output  
 \*.bsh  
 test.py  
-Fiji.app  
-- model
+Fiji.app - model
  
