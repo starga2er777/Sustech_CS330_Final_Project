@@ -1,5 +1,5 @@
 # Sustech CS330 Course Project
-##  - Ancient Bronze Casting Block Microstructure Image Analysis
+##  - Ancient Bronze Artifact Casting Mould Microstructure Image Analysis
   
   
 #### File Structure  
