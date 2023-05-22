@@ -1,15 +1,21 @@
 #@ String input_dir
 #@ String output_dir
+#@ int erosion
+#@ int dilation
+
 #@output answer
 #@output file_names
+#@output particles
 
-import trainableSegmentation.utils.Utils;
 import ij.io.FileSaver;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import ij.process.ImageStatistics;
 import ij.plugin.filter.ThresholdToSelection;
+import ij.plugin.filter.ParticleAnalyzer;
+import ij.measure.ResultsTable;
+import ij.measure.Measurements;
 
 
 inputDir = new File(input_dir);
@@ -17,6 +23,7 @@ outputDir = new File(output_dir);
 
 answer = new ArrayList();
 file_names = new ArrayList();
+particles = new ArrayList();
 
 // starting time
 startTime = System.currentTimeMillis();
@@ -43,11 +50,36 @@ for ( i = 0; i < listOfFiles.length; i++ )
             answer.add(temp);
             file_names.add(listOfFiles[i].getName());
 
-            ip.setThreshold(0, 255, ImageProcessor.BLACK_AND_WHITE_LUT);
             ip.threshold(0);
-            ip.erode();
+            ip.invert();
+
+            for(k = 0; k < dilation; k++)
+                ip.dilate();
+
+            for(k = 0; k < erosion; k++)
+                ip.erode();
 
             image.setProcessor(ip);
+
+            // analyze particles
+
+            measurements = Measurements.AREA;
+            rt = new ResultsTable();
+
+            pa = new ParticleAnalyzer(0, measurements, rt, 100, Double.POSITIVE_INFINITY);
+            pa.analyze(image);
+
+            size_hist = new ArrayList();
+            int rowCount = rt.getCounter();
+            // read each row from ResultsTable
+            for (int row = 0; row < rowCount; row++) {
+                String rowData = rt.getRowAsString(row);
+                String[] rowSplited = rowData.split("\t");
+                size_hist.add(Integer.parseInt(rowSplited[1]));
+            }
+
+            // Store the particle analysis results
+            particles.add(size_hist);
 
             // save result as TIFF in output folder
             outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".tiff";

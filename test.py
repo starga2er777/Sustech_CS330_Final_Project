@@ -19,11 +19,10 @@ model_path = './c3v3.model'
 
 args = {"input_dir": input_directory,
         "output_dir": segment_directory,
-        "model_path": model_path,
-        "guassian_sigma": 5.0}
+        "model_path": model_path}
 
 # run segmentation script
-# result = ij.py.run_script("BeanShell", script, args)
+result = ij.py.run_script("BeanShell", script, args)
 
 print("-------- Segmentation Complete --------")
 print("Start Analysis")
@@ -33,16 +32,22 @@ script_path = '../analysis.bsh'
 with open(script_path, 'r') as raw_script:
     script = raw_script.read()
 
+# process the image, then calculate the data
 args = {"input_dir": segment_directory,
-        "output_dir": analysis_directory}
+        "output_dir": analysis_directory,
+        "dilation": 3,
+        "erosion": 4}
 
 result = ij.py.run_script("BeanShell", script, args)
 
 file_names = ij.py.from_java(result.getOutput("file_names"))
-area_size = ij.py.from_java(result.getOutput("answer"))
-print(file_names)
-print(area_size)
+elem_percentage = ij.py.from_java(result.getOutput("answer"))
+elem_area_lists = ij.py.from_java(result.getOutput("particles"))
 
-print("-------- Analysis Complete --------")
+print(file_names)
+print(elem_percentage)
+print(elem_area_lists)
+
+print("-------- Processing Complete --------")
 
 end = 1

@@ -1,7 +1,6 @@
 #@ String input_dir
 #@ String output_dir
 #@ String model_path
-#@ float guassian_sigma
 
 import trainableSegmentation.WekaSegmentation;
 import trainableSegmentation.utils.Utils;
@@ -53,10 +52,6 @@ for ( i = 0; i < listOfFiles.length; i++ )
             if( !getProbs )
                 // assign same LUT as in GUI
                 result.setLut( Utils.getGoldenAngleLUT() );
-
-            // Gaussian Blur
-            GaussianBlur gaussianBlur = new GaussianBlur();
-            gaussianBlur.blurGaussian(result.getProcessor(), guassian_sigma);
 
             // save result as TIFF in output folder
             outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".tiff";
