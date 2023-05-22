@@ -12,18 +12,18 @@ with open(script_path, 'r') as raw_script:
 
 
 # set args
-input_directory = '../test_input/'
-output_directory = '../test_output/'
+input_directory = '../raw_input/'
+segment_directory = '../segment_output/'
+analysis_directory = '../threshold_output/'
 model_path = './c3v3.model'
 
 args = {"input_dir": input_directory,
-        "output_dir": output_directory,
+        "output_dir": segment_directory,
         "model_path": model_path,
         "guassian_sigma": 5.0}
 
 # run segmentation script
-# TODO
-result = ij.py.run_script("BeanShell", script, args)
+# result = ij.py.run_script("BeanShell", script, args)
 
 print("-------- Segmentation Complete --------")
 print("Start Analysis")
@@ -33,7 +33,8 @@ script_path = '../analysis.bsh'
 with open(script_path, 'r') as raw_script:
     script = raw_script.read()
 
-args = {"input_dir": output_directory}
+args = {"input_dir": segment_directory,
+        "output_dir": analysis_directory}
 
 result = ij.py.run_script("BeanShell", script, args)
 

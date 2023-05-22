@@ -1,4 +1,5 @@
 #@ String input_dir
+#@ String output_dir
 #@output answer
 #@output file_names
 
@@ -8,9 +9,12 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import ij.process.ImageStatistics;
+import ij.plugin.filter.ThresholdToSelection;
 
 
 inputDir = new File(input_dir);
+outputDir = new File(output_dir);
+
 answer = new ArrayList();
 file_names = new ArrayList();
 
@@ -38,7 +42,22 @@ for ( i = 0; i < listOfFiles.length; i++ )
             temp.add(histogram[2]);
             answer.add(temp);
             file_names.add(listOfFiles[i].getName());
+
+            ip.setThreshold(0, 255, ImageProcessor.BLACK_AND_WHITE_LUT);
+            ip.threshold(0);
+            ip.erode();
+
+            image.setProcessor(ip);
+
+            // save result as TIFF in output folder
+            outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".tiff";
+            new FileSaver( image ).saveAsTiff( outputDir.getPath() + File.separator + outputFileName );
         }
+
+        // force garbage collection (important for large images)
+        result = null; 
+        image = null;
+        System.gc();
     }
 }
 
