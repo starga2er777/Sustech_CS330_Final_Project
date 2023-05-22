@@ -3,14 +3,15 @@
   
   
 #### File Structure  
-.  
-├── test.py                 <div style="text-align: right"> - main script </div>
-├── raw_input               <div style="text-align: right"> - input directory  </div>
-├── segment_output          <div style="text-align: right"> - segmentation output directory  </div>
-├── threshold_output        <div style="text-align: right"> - final output directory   </div>
-├── \*.bsh                  <div style="text-align: right"> - BeanShell scripts  </div>
-├── Fiji.app                <div style="text-align: right"> - ImageJ content (Available from [Fiji Downloads](https://imagej.net/software/fiji/downloads), a lower version such as 3.24 is required)  </div>
-│    ├── \*.model           <div style="text-align: right"> - Trained segmentation model to be loaded </div>
+```
+├── test.py                  # main script
+├── raw_input                # input directory  
+├── segment_output           # segmentation output directory  
+├── threshold_output         # final output directory 
+├── \*.bsh                   # BeanShell scripts 
+├── Fiji.app                 # ImageJ Content (Available from https://imagej.net/software/fiji/downloads, a lower version eg. 3.24 is required) 
+│    ├── \*.model            # Trained segmentation model to be loaded 
 │    ├── ...         
 ├── .gitignore  
 └── README.md  
+```
