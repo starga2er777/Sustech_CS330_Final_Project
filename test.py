@@ -1,5 +1,9 @@
 import os
 import imagej
+import numpy as np
+import pandas as pd
+from pandas import DataFrame
+import matplotlib.pyplot as plt
 
 # ij = imagej.init()
 ij = imagej.init('./Fiji.app', mode=imagej.Mode.HEADLESS)
@@ -35,19 +39,59 @@ with open(script_path, 'r') as raw_script:
 # process the image, then calculate the data
 args = {"input_dir": segment_directory,
         "output_dir": analysis_directory,
-        "dilation": 3,
-        "erosion": 4}
+        "dilation": 2,
+        "erosion": 3}
 
 result = ij.py.run_script("BeanShell", script, args)
 
-file_names = ij.py.from_java(result.getOutput("file_names"))
-elem_percentage = ij.py.from_java(result.getOutput("answer"))
-elem_area_lists = ij.py.from_java(result.getOutput("particles"))
+file_names = list(ij.py.from_java(result.getOutput("file_names")))
+elem_percentage = list(ij.py.from_java(result.getOutput("answer")))
+elem_area_lists = list(ij.py.from_java(result.getOutput("particles")))
 
-print(file_names)
-print(elem_percentage)
-print(elem_area_lists)
+new_list = []
+
+# for percentage in elem_percentage:
+#     new_list.append(list(percentage))
+
+for area_list in elem_area_lists:
+    new_list.append(list(area_list))
+
+elem_area_lists = new_list
+# print(file_names)
+# print(elem_percentage)
+# print(elem_area_lists)
+
+# print(list(file_names))
+for i in range(len(elem_area_lists)):
+    area_list = elem_area_lists[i]
+    figure, axes = plt.subplots(1, 4, figsize=(20, 5))
+    data_range_500 = [value for value in area_list if 0 <= value <= 10000]
+    axes[0].hist(data_range_500, bins=20, alpha=0.5)
+    axes[0].set_title('Distribution of Area for Small Particles')
+    axes[0].set_xlabel('Area')
+    axes[0].set_ylabel('Frequency')
+
+    data_range_10000 = [value for value in area_list if value > 10000]
+    axes[1].hist(data_range_10000, bins=20, alpha=0.5)
+    axes[1].set_title('Distribution of Area for Big Particles')
+    axes[1].set_xlabel('Area')
+    axes[1].set_ylabel('Frequency')
+
+    # Plot boxplot of area
+    axes[2].boxplot(area_list)
+    axes[2].set_title('Boxplot of Area for Particles')
+    axes[2].set_xlabel('Area')
+    axes[2].set_ylabel('Value')
+
+
+    # Create a pie chart
+    labels = ['Particles', 'Clay', 'Cavity']
+    axes[3].pie(elem_percentage[i], labels=labels, autopct='%1.1f%%')
+    axes[3].set_title('Distribution of Categories')
+
+    plt.tight_layout()
+    plt.savefig('../graph_output/' + file_names[i])
+
 
 print("-------- Processing Complete --------")
 
-end = 1

@@ -1,6 +1,8 @@
 #@ String input_dir
 #@ String output_dir
 #@ String model_path
+#@ int erosion
+#@ int dilation
 
 import trainableSegmentation.WekaSegmentation;
 import trainableSegmentation.utils.Utils;
@@ -54,8 +56,8 @@ for ( i = 0; i < listOfFiles.length; i++ )
                 result.setLut( Utils.getGoldenAngleLUT() );
 
             // save result as TIFF in output folder
-            outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".tiff";
-            new FileSaver( result ).saveAsTiff( outputDir.getPath() + File.separator + outputFileName );
+            outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".png";
+            new FileSaver( result ).saveAsPng( outputDir.getPath() + File.separator + outputFileName );
  
             // force garbage collection (important for large images)
             result = null; 

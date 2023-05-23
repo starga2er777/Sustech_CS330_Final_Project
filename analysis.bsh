@@ -66,7 +66,7 @@ for ( i = 0; i < listOfFiles.length; i++ )
             measurements = Measurements.AREA;
             rt = new ResultsTable();
 
-            pa = new ParticleAnalyzer(0, measurements, rt, 100, Double.POSITIVE_INFINITY);
+            pa = new ParticleAnalyzer(0, measurements, rt, 500, Double.POSITIVE_INFINITY);
             pa.analyze(image);
 
             size_hist = new ArrayList();
@@ -82,8 +82,8 @@ for ( i = 0; i < listOfFiles.length; i++ )
             particles.add(size_hist);
 
             // save result as TIFF in output folder
-            outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".tiff";
-            new FileSaver( image ).saveAsTiff( outputDir.getPath() + File.separator + outputFileName );
+            outputFileName = listOfFiles[ i ].getName().replaceFirst("[.][^.]+$", "") + ".png";
+            new FileSaver( image ).saveAsPng( outputDir.getPath() + File.separator + outputFileName );
         }
 
         // force garbage collection (important for large images)
