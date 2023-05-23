@@ -5,6 +5,13 @@ import pandas as pd
 from pandas import DataFrame
 import matplotlib.pyplot as plt
 
+# TODO: scales taken as inputs
+scale_len = 400 # pixels
+scale_size = 100 # μm
+
+# μm per pixel
+unit = scale_size / scale_len
+
 # ij = imagej.init()
 ij = imagej.init('./Fiji.app', mode=imagej.Mode.HEADLESS)
 
@@ -25,7 +32,7 @@ args = {"input_dir": input_directory,
         "output_dir": segment_directory,
         "model_path": model_path}
 
-# run segmentation script
+# run segmentation script - takes quite a long time
 # result = ij.py.run_script("BeanShell", script, args)
 
 print("-------- Segmentation Complete --------")
@@ -39,7 +46,7 @@ with open(script_path, 'r') as raw_script:
 # process the image, then calculate the data
 args = {"input_dir": segment_directory,
         "output_dir": analysis_directory,
-        "noise_rad": 7.0}
+        "noise_rad": 8.0}
 
 result = ij.py.run_script("BeanShell", script, args)
 
@@ -47,15 +54,29 @@ file_names = list(ij.py.from_java(result.getOutput("file_names")))
 elem_percentage = list(ij.py.from_java(result.getOutput("answer")))
 elem_area_lists = list(ij.py.from_java(result.getOutput("particles")))
 
+# convert from java list to python list
 new_list = []
 
-# for percentage in elem_percentage:
-#     new_list.append(list(percentage))
+for java_list in elem_percentage:
+    py_list = list(java_list)
+    new_list.append([area_val * unit for area_val in py_list])
 
-for area_list in elem_area_lists:
-    new_list.append(list(area_list))
+elem_percentage = new_list
+
+new_list = []
+
+for java_list in elem_area_lists:
+    py_list = list(java_list)
+    new_list.append([area_val * unit for area_val in py_list])
 
 elem_area_lists = new_list
+
+
+# OUTPUTS:
+# file_names - file name according to the input images
+# elem_percentage - area size of each element(gravel particles, clay and cavity)
+# elem_area_lists - lists of size of each gravel particle
+
 
 
 for i in range(len(elem_area_lists)):
