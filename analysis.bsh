@@ -1,14 +1,13 @@
 #@ String input_dir
 #@ String output_dir
-#@ int erosion
-#@ int dilation
+#@ double noise_rad
 
 #@output answer
 #@output file_names
 #@output particles
 
 import ij.io.FileSaver;
-import ij.IJ;
+import ij.IJ;import ij.plugin.filter.RankFilters;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import ij.process.ImageStatistics;
@@ -16,6 +15,7 @@ import ij.plugin.filter.ThresholdToSelection;
 import ij.plugin.filter.ParticleAnalyzer;
 import ij.measure.ResultsTable;
 import ij.measure.Measurements;
+import ij.plugin.filter.RankFilters;
 
 
 inputDir = new File(input_dir);
@@ -51,15 +51,15 @@ for ( i = 0; i < listOfFiles.length; i++ )
             file_names.add(listOfFiles[i].getName());
 
             ip.threshold(0);
+
             ip.invert();
 
-            for(k = 0; k < dilation; k++)
-                ip.dilate();
+            RankFilters rankFilters = new RankFilters();
+            rankFilters.rank(ip, noise_rad, 5, 0, 50f);
 
-            for(k = 0; k < erosion; k++)
-                ip.erode();
 
             image.setProcessor(ip);
+
 
             // analyze particles
 

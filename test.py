@@ -26,7 +26,7 @@ args = {"input_dir": input_directory,
         "model_path": model_path}
 
 # run segmentation script
-result = ij.py.run_script("BeanShell", script, args)
+# result = ij.py.run_script("BeanShell", script, args)
 
 print("-------- Segmentation Complete --------")
 print("Start Analysis")
@@ -39,8 +39,7 @@ with open(script_path, 'r') as raw_script:
 # process the image, then calculate the data
 args = {"input_dir": segment_directory,
         "output_dir": analysis_directory,
-        "dilation": 2,
-        "erosion": 3}
+        "noise_rad": 7.0}
 
 result = ij.py.run_script("BeanShell", script, args)
 
