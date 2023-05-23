@@ -85,19 +85,19 @@ for i in range(len(elem_area_lists)):
     data_range_500 = [value for value in area_list if 0 <= value <= 10000]
     axes[0].hist(data_range_500, bins=20, alpha=0.5)
     axes[0].set_title('Distribution of Area for Small Particles')
-    axes[0].set_xlabel('Area')
+    axes[0].set_xlabel('Area(μm^2)')
     axes[0].set_ylabel('Frequency')
 
     data_range_10000 = [value for value in area_list if value > 10000]
     axes[1].hist(data_range_10000, bins=20, alpha=0.5)
     axes[1].set_title('Distribution of Area for Big Particles')
-    axes[1].set_xlabel('Area')
+    axes[1].set_xlabel('Area(μm^2)')
     axes[1].set_ylabel('Frequency')
 
     # Plot boxplot of area
     axes[2].boxplot(area_list)
     axes[2].set_title('Boxplot of Area for Particles')
-    axes[2].set_xlabel('Area')
+    axes[2].set_xlabel('Area(μm^2)')
     axes[2].set_ylabel('Value')
 
 

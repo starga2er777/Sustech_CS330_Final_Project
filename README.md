@@ -2,6 +2,9 @@
 ##  - Chinese Ancient Bronze Artifact Casting Mould Microstructure Image Analysis
   
   
+[Install PyimageJ](https://pyimagej.readthedocs.io/en/latest/Install.html)
+
+
 #### File Structure  
 ```
 ├── test.py                  # main script
