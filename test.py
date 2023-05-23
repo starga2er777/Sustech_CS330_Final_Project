@@ -56,11 +56,8 @@ for area_list in elem_area_lists:
     new_list.append(list(area_list))
 
 elem_area_lists = new_list
-# print(file_names)
-# print(elem_percentage)
-# print(elem_area_lists)
 
-# print(list(file_names))
+
 for i in range(len(elem_area_lists)):
     area_list = elem_area_lists[i]
     figure, axes = plt.subplots(1, 4, figsize=(20, 5))
