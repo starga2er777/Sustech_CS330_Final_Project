@@ -82,22 +82,30 @@ elem_area_lists = new_list
 for i in range(len(elem_area_lists)):
     area_list = elem_area_lists[i]
     figure, axes = plt.subplots(1, 4, figsize=(20, 5))
-    data_range_500 = [value for value in area_list if 0 <= value <= 10000]
+    res = np.percentile(area_list, (25, 50, 75), interpolation='midpoint')
+    q3 = res[0]
+    q1 = res[2]
+    up = 2.5 * q1 - 1.5 * q3
+    # print(q3)
+    # print(q1)
+    # print(up)
+
+    data_range_500 = [value for value in area_list if 0 <= value <= up]
     axes[0].hist(data_range_500, bins=20, alpha=0.5)
     axes[0].set_title('Distribution of Area for Small Particles')
-    axes[0].set_xlabel('Area(μm^2)')
+    axes[0].set_xlabel('Area')
     axes[0].set_ylabel('Frequency')
 
-    data_range_10000 = [value for value in area_list if value > 10000]
+    data_range_10000 = [value for value in area_list if value > up]
     axes[1].hist(data_range_10000, bins=20, alpha=0.5)
     axes[1].set_title('Distribution of Area for Big Particles')
-    axes[1].set_xlabel('Area(μm^2)')
+    axes[1].set_xlabel('Area')
     axes[1].set_ylabel('Frequency')
 
     # Plot boxplot of area
     axes[2].boxplot(area_list)
     axes[2].set_title('Boxplot of Area for Particles')
-    axes[2].set_xlabel('Area(μm^2)')
+    axes[2].set_xlabel('Area')
     axes[2].set_ylabel('Value')
 
 
